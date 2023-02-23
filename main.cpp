@@ -107,10 +107,10 @@ void duomenu_suvedimas(studentas* asmuo){
     
 };
 
-void duomenu_isvedimas(studentas* asmuo, int skaicius){
+void duomenu_isvedimas_vidurkis(studentas* asmuo, int skaicius){
 
-    std::cout << "Pavarde     Vardas          Galutinis (Vid.)    Galutinis (Med.)\n";
-    std::cout << "-----------------------------------------------------------------\n";
+    std::cout << "Pavarde     Vardas          Galutinis (Vid.)\n";
+    std::cout << "----------------------------------------------\n";
 
     for(int i=0; i < skaicius; i++){
 
@@ -119,8 +119,21 @@ void duomenu_isvedimas(studentas* asmuo, int skaicius){
                  "    " <<
                  asmuo[i].vardas <<
                  "           " <<
-                asmuo[i].galutinis <<
-                "                " <<
+                asmuo[i].galutinis << std::endl;
+    }
+};
+void duomenu_isvedimas_mediana(studentas* asmuo, int skaicius){
+
+    std::cout << "Pavarde     Vardas          Galutinis (Med.)\n";
+    std::cout << "---------------------------------------------\n";
+
+    for(int i=0; i < skaicius; i++){
+
+    std::cout << std::fixed << std::setprecision(2);
+    std::cout << asmuo[i].pavarde <<
+                 "    " <<
+                 asmuo[i].vardas <<
+                 "           " <<
                 asmuo[i].mediana << std::endl;
     }
 };
@@ -151,8 +164,21 @@ int main(){
         }
     }while(user_input == "t");
 
-    duomenu_isvedimas(asmenys, mokiniu_dydis);
+    std::cout << "Norite rezultatus matyti pagal vidurkį ar medianą?\n";
+    std::cout << "[v] - VIDURKIS     [m] - MEDIANA\n";
+    std::cin >> user_input;
 
+    while(user_input != "v" && user_input != "m"){
+        std::cout << "Galite pasirinkti tik:\n";
+        std::cout << "[v] - VIDURKIS     [m] - MEDIANA\n";
+        std::cin >> user_input;
+    }
+    if(user_input == "v"){
+        duomenu_isvedimas_vidurkis(asmenys, mokiniu_dydis);
+    }
+    else if(user_input == "m"){
+        duomenu_isvedimas_mediana(asmenys, mokiniu_dydis);
+    }
 
 
 
