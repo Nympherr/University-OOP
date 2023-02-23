@@ -18,33 +18,31 @@ struct studentas {
 
 };
 
-void medianos_skaiciavimas(studentas* asmuo){
+void medianos_skaiciavimas(studentas* asmuo, int indeksas){
 
-    int dydis = sizeof(asmuo->pazymiai) / sizeof(int);
-    std::sort(asmuo->pazymiai,asmuo->pazymiai + dydis);
+    std::sort(asmuo->pazymiai,asmuo->pazymiai + indeksas);
 
-    if(dydis % 2 == 1){
-            int indeksas = (dydis + 1) / 2;
-            asmuo->mediana = asmuo->pazymiai[indeksas - 1];
+    if(indeksas % 2 == 1){
+            int indeksas_masyvo = (indeksas + 1) / 2;
+            asmuo->mediana = asmuo->pazymiai[indeksas_masyvo - 1];
     }
     else{
-            int indeksas_pirmas = dydis / 2 - 1;
-            int indeksas_antras = dydis / 2;
+            int indeksas_pirmas = indeksas / 2 - 1;
+            int indeksas_antras = indeksas / 2;
             double pazymys_pirmas = asmuo->pazymiai[indeksas_pirmas];
             double pazymys_antras = asmuo->pazymiai[indeksas_antras];
             asmuo->mediana = (pazymys_pirmas + pazymys_antras) / 2;
     }
 };
 
-void galutinio_balo_skaiciavimas(studentas* asmuo){
+void galutinio_balo_skaiciavimas(studentas* asmuo, int indeksas){
 
     double vidurkis;
-    int dydis = sizeof(asmuo->pazymiai) / sizeof(int);
     
-    for(int i=0; i < dydis;i++){
+    for(int i=0; i < indeksas;i++){
         vidurkis += asmuo->pazymiai[i];
     }
-    vidurkis = vidurkis / dydis;
+    vidurkis = vidurkis / indeksas;
     
     asmuo->galutinis = (0.4 * vidurkis) + (0.6 * asmuo->egzaminas);
 };
@@ -106,8 +104,8 @@ void duomenu_suvedimas(studentas* asmuo){
     std::cin >> asmuo[i].egzaminas;
     std::cout << std::endl;
 
-    galutinio_balo_skaiciavimas(&asmuo[i]);
-    medianos_skaiciavimas(&asmuo[i]);
+    galutinio_balo_skaiciavimas(&asmuo[i],pradinis_dydis);
+    medianos_skaiciavimas(&asmuo[i], pradinis_dydis);
     }
 };
 
