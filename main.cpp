@@ -1,6 +1,9 @@
+// TAI YRA C MASYVO VERSIJA
+
 #include <iostream>
 #include <algorithm>
 #include <iomanip>
+#include <limits>
 
 const int skaicius = 3;
 
@@ -8,7 +11,7 @@ struct studentas {
 
     std::string vardas;
     std::string pavarde;
-    int pazymiai[skaicius];
+    int* pazymiai;
     int egzaminas;
     double galutinis;
     double mediana;
@@ -49,7 +52,7 @@ void galutinio_balo_skaiciavimas(studentas* asmuo){
 void duomenu_suvedimas(studentas* asmuo){
 
     for(int i =0; i < skaicius;i++){
-
+    std::cout << "[" << i+1 << "]\n";
     std::cout << "Studento vardas: ";
     std::cin >> asmuo[i].vardas;
 
@@ -57,12 +60,51 @@ void duomenu_suvedimas(studentas* asmuo){
     std::cin >> asmuo[i].pavarde;
 
     std::cout << "Studento pazymiai: ";
-    for(int j = 0; j < skaicius; j++){
-            std::cin >> asmuo[i].pazymiai[j];
-    }
 
+    
+    int pasirinkimas = 0;
+    int pradinis_dydis = 0;
+    int maksimalus_dydis = 10;
+    int* pazymiu_masyvas = new int[maksimalus_dydis];
+
+
+        while(std::cin >> pasirinkimas){
+
+            if(pasirinkimas < 1 || pasirinkimas > 10){
+                std::cout << "Pažymys gali būti tik tarp 1-10!";
+            }
+
+            else if(pradinis_dydis == maksimalus_dydis - 1){
+                int* naujas_pazymiu_masyvas = new int[maksimalus_dydis * 2];
+                std::copy(pazymiu_masyvas, pazymiu_masyvas + maksimalus_dydis, naujas_pazymiu_masyvas);
+                delete[] pazymiu_masyvas;
+                pazymiu_masyvas = naujas_pazymiu_masyvas;
+                maksimalus_dydis *= 2;
+                pazymiu_masyvas[pradinis_dydis] = pasirinkimas;
+                pradinis_dydis++;
+
+            }
+            else{
+                pazymiu_masyvas[pradinis_dydis] = pasirinkimas;
+                pradinis_dydis++;
+            }
+        }
+
+    asmuo[i].pazymiai = new int[pradinis_dydis + 1];
+    std::copy(pazymiu_masyvas, pazymiu_masyvas + pradinis_dydis + 1, asmuo[i].pazymiai);
+    delete[] pazymiu_masyvas;
+    
+
+    std::cout << "TESTINGAS: ";
+        for(int t=0;t < pradinis_dydis; t++){
+            std::cout << asmuo[i].pazymiai[t];
+        }
+    std::cout << std::endl;
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::cout << "Studento egzamino rezultatas: ";
     std::cin >> asmuo[i].egzaminas;
+    std::cout << std::endl;
 
     galutinio_balo_skaiciavimas(&asmuo[i]);
     medianos_skaiciavimas(&asmuo[i]);
@@ -73,7 +115,7 @@ void duomenu_isvedimas(studentas* asmuo){
 
     std::cout << "Pavarde     Vardas          Galutinis (Vid.)    Galutinis (Med.)\n";
     std::cout << "-----------------------------------------------------------------\n";
-    
+
     for(int i=0; i < skaicius; i++){
 
     std::cout << std::fixed << std::setprecision(2);
@@ -90,7 +132,7 @@ void duomenu_isvedimas(studentas* asmuo){
 
 int main(){
 
-    studentas asmenys[skaicius];
+    studentas* asmenys = new studentas[skaicius];
 
     duomenu_suvedimas(asmenys);
     duomenu_isvedimas(asmenys);
