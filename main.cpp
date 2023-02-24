@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <iomanip>
 #include <limits>
+#include <random>
 
 struct studentas {
 
@@ -13,6 +14,26 @@ struct studentas {
     int egzaminas;
     double galutinis;
     double mediana;
+
+};
+int atsitiktiniu_reiksmiu_generavimas(studentas* asmuo){
+
+    std::random_device rd;
+    std::mt19937 eng(rd());
+
+    std::uniform_int_distribution<> pazymiu_skaicius(1, 20);
+    std::uniform_int_distribution<> pazymys(1, 10);
+
+    int indekso_numeris = pazymiu_skaicius(eng);
+    asmuo->pazymiai = new int[indekso_numeris];
+
+    for(int i =0; i < indekso_numeris;i++){
+        asmuo->pazymiai[i] = pazymys(eng);
+    }
+
+    asmuo->egzaminas = pazymys(eng);
+
+    return indekso_numeris;
 
 };
 
@@ -54,6 +75,18 @@ void duomenu_suvedimas(studentas* asmuo){
 
     std::cout << "Studento pavarde: ";
     std::cin >> asmuo->pavarde;
+
+    std::cout << "Ar noretumete atsitiktinai sugeneruotri pažymių ir egzamino rezultatus?\n";
+    std::cout << "[random]-TAIP     [betkuri raide]-NE\n";
+    std::string input;
+    std::cin >> input;
+
+    if(input == "random"){
+        int skaiciukas = atsitiktiniu_reiksmiu_generavimas(asmuo);
+        galutinio_balo_skaiciavimas(asmuo,skaiciukas);
+        medianos_skaiciavimas(asmuo, skaiciukas);
+        return;
+    }
 
     std::cout << "Studento pazymiai: ";
 
@@ -138,7 +171,6 @@ void duomenu_isvedimas_mediana(studentas* asmuo, int skaicius){
     }
 };
 
-
 int main(){
 
     std::string user_input;
@@ -179,7 +211,6 @@ int main(){
     else if(user_input == "m"){
         duomenu_isvedimas_mediana(asmenys, mokiniu_dydis);
     }
-
 
 
     return 1;
