@@ -5,6 +5,8 @@
 #include <iomanip>
 #include <limits>
 #include <random>
+#include <string>
+#include <cctype>
 
 struct studentas {
 
@@ -68,13 +70,52 @@ void galutinio_balo_skaiciavimas(studentas* asmuo, int indeksas){
 
 void duomenu_suvedimas(studentas* asmuo){
 
-
-
     std::cout << "Studento vardas: ";
-    std::cin >> asmuo->vardas;
+
+    bool yra_vardas = false;
+
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    while (!yra_vardas || asmuo->vardas.length() < 1 || asmuo->vardas.length() > 20) {
+
+        std::getline(std::cin, asmuo->vardas);
+
+        yra_vardas = true;   
+        for (char c : asmuo->vardas) {
+            if (!std::isalpha(c)) {
+                yra_vardas = false;
+                std::cout << "Varda gali sudaryti tik raides!\n";
+                break;
+            }
+        }
+
+        if(asmuo->vardas.length() < 1 || asmuo->vardas.length() > 20){
+            std::cout << "Vardas gali tureti tik 1-20 raidziu!\n";
+        }
+    }
 
     std::cout << "Studento pavarde: ";
-    std::cin >> asmuo->pavarde;
+
+    bool yra_pavarde = false;
+
+     while (!yra_pavarde || asmuo->pavarde.length() < 1 || asmuo->pavarde.length() > 20) {
+
+        std::getline(std::cin, asmuo->pavarde);
+
+        yra_pavarde = true;   
+        for (char c : asmuo->pavarde) {
+            if (!std::isalpha(c)) {
+                yra_pavarde = false;
+                std::cout << "Pavarde gali sudaryti tik raides!\n";
+                break;
+            }
+        }
+
+        if(asmuo->pavarde.length() < 1 || asmuo->pavarde.length() > 20){
+            std::cout << "Pavarde gali tureti tik 1-20 raidziu!\n";
+        }
+    }
 
     std::cout << "Ar noretumete atsitiktinai sugeneruotri pažymių ir egzamino rezultatus?\n";
     std::cout << "[random]-TAIP     [betkuri raide]-NE\n";
@@ -142,34 +183,54 @@ void duomenu_suvedimas(studentas* asmuo){
 
 void duomenu_isvedimas_vidurkis(studentas* asmuo, int skaicius){
 
-    std::cout << "Pavarde     Vardas          Galutinis (Vid.)\n";
-    std::cout << "----------------------------------------------\n";
+    std::cout << "Pavarde              Vardas             Galutinis (Vid.)\n";
+    std::cout << "------------------------------------------------------------\n";
 
-    for(int i=0; i < skaicius; i++){
+    for(int x = 0; x < skaicius ; x++){
 
-    std::cout << std::fixed << std::setprecision(2);
-    std::cout << asmuo[i].pavarde <<
-                 "    " <<
-                 asmuo[i].vardas <<
-                 "           " <<
-                asmuo[i].galutinis << std::endl;
+        int tarpai_1 = 21 - asmuo[x].pavarde.length();
+        int tarpai_2 = 21 - asmuo[x].vardas.length();
+
+        std::cout << std::fixed << std::setprecision(2);
+
+        std::cout << asmuo[x].pavarde;
+        for(int i = 0; i < tarpai_1; i++){
+            std::cout << " ";
+        }
+
+        std::cout << asmuo[x].vardas;
+        for(int j = 0; j < tarpai_2; j++){
+        std::cout << " ";
+        }
+
+        std::cout << asmuo[x].galutinis << std::endl;
     }
-};
+}
 void duomenu_isvedimas_mediana(studentas* asmuo, int skaicius){
 
-    std::cout << "Pavarde     Vardas          Galutinis (Med.)\n";
-    std::cout << "---------------------------------------------\n";
+    std::cout << "Pavarde              Vardas             Galutinis (Med.)\n";
+    std::cout << "------------------------------------------------------------\n";
 
-    for(int i=0; i < skaicius; i++){
+    for(int x = 0; x < skaicius ; x++){
 
-    std::cout << std::fixed << std::setprecision(2);
-    std::cout << asmuo[i].pavarde <<
-                 "    " <<
-                 asmuo[i].vardas <<
-                 "           " <<
-                asmuo[i].mediana << std::endl;
+        int tarpai_1 = 21 - asmuo[x].pavarde.length();
+        int tarpai_2 = 21 - asmuo[x].vardas.length();
+
+        std::cout << std::fixed << std::setprecision(2);
+
+        std::cout << asmuo[x].pavarde;
+        for(int i = 0; i < tarpai_1; i++){
+            std::cout << " ";
+        }
+
+        std::cout << asmuo[x].vardas;
+        for(int j = 0; j < tarpai_2; j++){
+        std::cout << " ";
+        }
+
+        std::cout << asmuo[x].mediana << std::endl;
     }
-};
+}
 
 int main(){
 
